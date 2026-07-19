@@ -1,0 +1,6 @@
+{
+  "name": "FinAI Premium",
+  "description": "Sistema premium de gestão financeira pessoal offline com IndexedDB, painel inteligente e assistente virtual.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
