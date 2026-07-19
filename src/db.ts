@@ -1,7 +1,7 @@
 import { Card, Category, Transaction, SystemConfig, AppNotification, Month } from './types';
 
 const DB_NAME = 'FinAI_Premium_DB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {

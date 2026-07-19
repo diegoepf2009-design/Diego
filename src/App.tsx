@@ -115,7 +115,9 @@ export default function App() {
         if (t.cardId) {
           const card = cardMap.get(t.cardId);
           if (card) {
-            const [year, month] = t.monthId.split('-');
+            const parts = (t.monthId || '').split('-');
+            const year = parts[0] || '2026';
+            const month = parts[1] || '07';
             dueDateStr = `${year}-${month}-${String(card.dueDay).padStart(2, '0')}`;
           }
         }
@@ -241,7 +243,9 @@ export default function App() {
 
   // 5. Month Cloning routine (Separated month ID allocations)
   const handleCloneMonth = async () => {
-    const [year, month] = monthId.split('-').map(Number);
+    const parts = (monthId || '').split('-');
+    const year = parseInt(parts[0]) || 2026;
+    const month = parseInt(parts[1]) || 7;
     const nextDate = new Date(year, month, 1);
     const nextMonthId = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}`;
 
@@ -258,8 +262,9 @@ export default function App() {
         instCurrent = t.installmentCurrent + 1;
       }
 
-      const [tY, tM, tD] = t.date.split('-');
-      const newDateStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${tD || '10'}`;
+      const tParts = (t.date || '').split('-');
+      const tD = tParts[2] || '10';
+      const newDateStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${tD}`;
 
       const clonedTrans: Transaction = {
         ...t,
@@ -535,7 +540,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-cyan-500/20 antialiased" id="finai-root">
+    <div className="min-h-screen bg-gradient-to-b from-[#0a2569] via-[#050b18] to-[#02050d] text-slate-100 font-sans selection:bg-cyan-500/20 antialiased" id="finai-root">
       
       {/* Side Navigation (Left column on desktop, floating tab-bar on mobile) */}
       <Sidebar currentTab={activeTab} onChangeTab={setActiveTab} />

@@ -32,7 +32,9 @@ export default function CalendarView({
         const card = cardMap.get(item.cardId);
         if (card) {
           // If transaction has a credit card, use the card's dueDay for the due date
-          const [year, month] = monthId.split('-');
+          const parts = (monthId || '').split('-');
+          const year = parts[0] || '2026';
+          const month = parts[1] || '07';
           dueDateStr = `${year}-${month}-${String(card.dueDay).padStart(2, '0')}`;
         }
       }

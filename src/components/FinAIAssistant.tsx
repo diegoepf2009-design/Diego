@@ -60,6 +60,34 @@ export default function FinAIAssistant({ currentTab, transactions, cards, config
   const carSavings = calculateSavings(carConfig);
   const houseSavings = calculateSavings(houseConfig);
 
+  // Determine assistant humor/mood based on financial health
+  const getAssistantMood = () => {
+    if (monthlyBalance > 1000) {
+      return {
+        mood: 'happy' as const,
+        color: '#10b981', // emerald
+        textColor: 'text-emerald-400',
+        bgColor: 'bg-emerald-500/10',
+      };
+    } else if (monthlyBalance >= 0) {
+      return {
+        mood: 'neutral' as const,
+        color: '#38bdf8', // sky-blue
+        textColor: 'text-sky-400',
+        bgColor: 'bg-sky-500/10',
+      };
+    } else {
+      return {
+        mood: 'sad' as const,
+        color: '#f87171', // red (like the robot screen in the image)
+        textColor: 'text-red-400',
+        bgColor: 'bg-red-500/10',
+      };
+    }
+  };
+
+  const { mood, color: moodColor, textColor } = getAssistantMood();
+
   // Update assistant message based on currentTab and database states
   useEffect(() => {
     let message = '';
@@ -137,8 +165,8 @@ export default function FinAIAssistant({ currentTab, transactions, cards, config
             >
               <X size={12} />
             </button>
-            <div className="flex items-center gap-1.5 font-semibold text-cyan-400 mb-1">
-              <Sparkles size={13} className="text-cyan-400" />
+            <div className={`flex items-center gap-1.5 font-semibold ${textColor} mb-1`}>
+              <Sparkles size={13} />
               <span>FinAI Coach</span>
             </div>
             <p className="pr-4">{assistantMessage}</p>
@@ -151,37 +179,36 @@ export default function FinAIAssistant({ currentTab, transactions, cards, config
             setShowPanel(true);
             setShowBubble(false);
           }}
-          className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-cyan-600 to-indigo-600 shadow-lg shadow-cyan-900/30 hover:scale-105 transition duration-300 border-2 border-white/20 hover:border-cyan-400"
+          className="group relative flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0a142c]/80 backdrop-blur-md shadow-2xl hover:scale-105 transition duration-300 border border-white/10 hover:border-cyan-400"
         >
-          {/* Breathing digital circle background */}
-          <span className="absolute -inset-1 rounded-full bg-cyan-400/20 opacity-0 group-hover:opacity-100 blur-md transition duration-300"></span>
+          {/* Breathing digital glow background */}
+          <span className="absolute -inset-1 rounded-2xl bg-cyan-500/10 opacity-0 group-hover:opacity-100 blur-md transition duration-300"></span>
           
-          {/* Digital Robot Face SVG */}
-          <svg className="h-10 w-10 animate-breathe" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Outer Helmet glow */}
-            <circle cx="50" cy="50" r="42" stroke="url(#paint0_linear)" strokeWidth="3" strokeLinecap="round" />
-            {/* Dark inside screen */}
-            <circle cx="50" cy="50" r="35" fill="#080e21" />
-            {/* Tech details on cheeks */}
-            <path d="M22 50H28M72 50H78" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
-            {/* Eyes */}
-            <g className="animate-blink">
-              <ellipse cx="38" cy="46" rx="5" ry="6" fill="#06b6d4" />
-              <ellipse cx="62" cy="46" rx="5" ry="6" fill="#06b6d4" />
-              {/* Pupils */}
-              <circle cx="38" cy="44" r="1.5" fill="#ffffff" />
-              <circle cx="62" cy="44" r="1.5" fill="#ffffff" />
-            </g>
-            {/* Curved Smiley mouth */}
-            <path d="M42 62C45 65 55 65 58 62" stroke="#06b6d4" strokeWidth="3" strokeLinecap="round" />
+          {/* Custom Robotic Face SVG matching reference */}
+          <svg className="h-12 w-12 animate-breathe" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Outer Head/Helmet (rounded rectangle with sky-blue contour) */}
+            <rect x="18" y="10" width="64" height="42" rx="16" stroke="#38bdf8" strokeWidth="4" fill="#0d1c3f" />
             
-            {/* Gradients */}
-            <defs>
-              <linearGradient id="paint0_linear" x1="8" y1="8" x2="92" y2="92" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#06b6d4" />
-                <stop offset="1" stopColor="#4f46e5" />
-              </linearGradient>
-            </defs>
+            {/* Inner Face/Screen (color matches mood) */}
+            <rect x="25" y="16" width="50" height="30" rx="10" stroke={moodColor} strokeWidth="3" fill="#040816" />
+            
+            {/* Eyes (colored by mood) */}
+            <circle cx="41" cy="28" r="4.5" fill={moodColor} />
+            <circle cx="59" cy="28" r="4.5" fill={moodColor} />
+            
+            {/* Mouth (shape and color depend on mood) */}
+            {mood === 'happy' && (
+              <path d="M42 36C44 39 56 39 58 36" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+            )}
+            {mood === 'neutral' && (
+              <path d="M43 37H57" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+            )}
+            {mood === 'sad' && (
+              <path d="M42 38C44 35 56 35 58 38" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+            )}
+            
+            {/* Body (rounded block with sky-blue contour, solid navy inside) */}
+            <rect x="24" y="58" width="52" height="34" rx="14" stroke="#38bdf8" strokeWidth="4" fill="#1e3a8a" />
           </svg>
         </button>
       </div>
@@ -196,9 +223,24 @@ export default function FinAIAssistant({ currentTab, transactions, cards, config
           <div className="w-full max-w-md h-full bg-slate-950/95 border-l border-white/10 p-6 shadow-2xl flex flex-col overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-              <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-                  <Sparkles size={18} />
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 flex items-center justify-center">
+                  <svg className="h-9 w-9" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="18" y="10" width="64" height="42" rx="16" stroke="#38bdf8" strokeWidth="4" fill="#0d1c3f" />
+                    <rect x="25" y="16" width="50" height="30" rx="10" stroke={moodColor} strokeWidth="3" fill="#040816" />
+                    <circle cx="41" cy="28" r="4.5" fill={moodColor} />
+                    <circle cx="59" cy="28" r="4.5" fill={moodColor} />
+                    {mood === 'happy' && (
+                      <path d="M42 36C44 39 56 39 58 36" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+                    )}
+                    {mood === 'neutral' && (
+                      <path d="M43 37H57" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+                    )}
+                    {mood === 'sad' && (
+                      <path d="M42 38C44 35 56 35 58 38" stroke={moodColor} strokeWidth="3" strokeLinecap="round" />
+                    )}
+                    <rect x="24" y="58" width="52" height="34" rx="14" stroke="#38bdf8" strokeWidth="4" fill="#1e3a8a" />
+                  </svg>
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-100 text-base">Painel Inteligente FinAI</h3>

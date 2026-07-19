@@ -53,7 +53,9 @@ export default function Dashboard({
 
   // Resolve previous month ID
   const prevMonthId = useMemo(() => {
-    const [year, month] = monthId.split('-').map(Number);
+    const parts = (monthId || '').split('-');
+    const year = parseInt(parts[0]) || 2026;
+    const month = parseInt(parts[1]) || 7;
     const date = new Date(year, month - 2, 1);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
   }, [monthId]);
@@ -288,12 +290,12 @@ export default function Dashboard({
         </div>
       </section>
 
-      {/* 1.2 Métricas Principais (KPI Cards) */}
+      {/* 1.2 Métricas Principais (KPI Cards) - Coloridos com cores alternadas */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* KPI: Receitas Próprias */}
-        <div className="glass-panel rounded-2xl p-4.5 border border-white/5 flex items-center justify-between shadow-md">
+        {/* KPI: Receitas Próprias (Emerald Accent) */}
+        <div className="bg-gradient-to-br from-emerald-950/30 via-slate-900/60 to-slate-950/90 rounded-2xl p-4.5 border border-emerald-500/20 flex items-center justify-between shadow-lg shadow-emerald-950/10 hover:scale-[1.01] transition-transform duration-200">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 tracking-wider uppercase">Receitas Próprias</span>
+            <span className="text-[11px] font-semibold text-emerald-400 tracking-wider uppercase">Receitas Próprias</span>
             <h3 className="text-lg font-bold font-display text-slate-100 tracking-tight">
               {formatBRL(metrics.ownIncome)}
             </h3>
@@ -303,10 +305,10 @@ export default function Dashboard({
           </div>
         </div>
 
-        {/* KPI: Receitas de Terceiros */}
-        <div className="glass-panel rounded-2xl p-4.5 border border-white/5 flex items-center justify-between shadow-md">
+        {/* KPI: Receitas de Terceiros (Cyan Accent) */}
+        <div className="bg-gradient-to-br from-cyan-950/30 via-slate-900/60 to-slate-950/90 rounded-2xl p-4.5 border border-cyan-500/20 flex items-center justify-between shadow-lg shadow-cyan-950/10 hover:scale-[1.01] transition-transform duration-200">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 tracking-wider uppercase">Receitas Terceiros</span>
+            <span className="text-[11px] font-semibold text-cyan-400 tracking-wider uppercase">Receitas Terceiros</span>
             <h3 className="text-lg font-bold font-display text-slate-100 tracking-tight">
               {formatBRL(metrics.thirdIncome)}
             </h3>
@@ -316,10 +318,10 @@ export default function Dashboard({
           </div>
         </div>
 
-        {/* KPI: Despesas Totais */}
-        <div className="glass-panel rounded-2xl p-4.5 border border-white/5 flex items-center justify-between shadow-md">
+        {/* KPI: Despesas Totais (Red Accent) */}
+        <div className="bg-gradient-to-br from-red-950/30 via-slate-900/60 to-slate-950/90 rounded-2xl p-4.5 border border-red-500/20 flex items-center justify-between shadow-lg shadow-red-950/10 hover:scale-[1.01] transition-transform duration-200">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 tracking-wider uppercase">Despesas Totais</span>
+            <span className="text-[11px] font-semibold text-red-400 tracking-wider uppercase">Despesas Totais</span>
             <h3 className="text-lg font-bold font-display text-slate-100 tracking-tight">
               {formatBRL(metrics.totalExpense)}
             </h3>
@@ -329,10 +331,10 @@ export default function Dashboard({
           </div>
         </div>
 
-        {/* KPI: Saldo Líquido do Mês */}
-        <div className="glass-panel rounded-2xl p-4.5 border border-white/5 flex items-center justify-between shadow-md">
+        {/* KPI: Saldo Líquido do Mês (Indigo Accent) */}
+        <div className="bg-gradient-to-br from-indigo-950/30 via-slate-900/60 to-slate-950/90 rounded-2xl p-4.5 border border-indigo-500/20 flex items-center justify-between shadow-lg shadow-indigo-950/10 hover:scale-[1.01] transition-transform duration-200">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 tracking-wider uppercase">Saldo Líquido</span>
+            <span className="text-[11px] font-semibold text-indigo-400 tracking-wider uppercase">Saldo Líquido</span>
             <h3 className={`text-lg font-bold font-display tracking-tight ${metrics.netBalance >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
               {formatBRL(metrics.netBalance)}
             </h3>

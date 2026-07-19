@@ -41,7 +41,9 @@ export default function Topbar({
 
   // Parse YYYY-MM into friendly localized string (e.g. Julho de 2026)
   const getFriendlyMonth = (mId: string) => {
-    const [year, month] = mId.split('-').map(Number);
+    const parts = (mId || '').split('-');
+    const year = parseInt(parts[0]) || 2026;
+    const month = parseInt(parts[1]) || 7;
     const date = new Date(year, month - 1, 1);
     const formatted = date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
@@ -49,14 +51,18 @@ export default function Topbar({
 
   // Month navigation helpers
   const handlePrevMonth = () => {
-    const [year, month] = monthId.split('-').map(Number);
+    const parts = (monthId || '').split('-');
+    const year = parseInt(parts[0]) || 2026;
+    const month = parseInt(parts[1]) || 7;
     const prevDate = new Date(year, month - 2, 1);
     const prevMonthStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`;
     onChangeMonth(prevMonthStr);
   };
 
   const handleNextMonth = () => {
-    const [year, month] = monthId.split('-').map(Number);
+    const parts = (monthId || '').split('-');
+    const year = parseInt(parts[0]) || 2026;
+    const month = parseInt(parts[1]) || 7;
     const nextDate = new Date(year, month, 1);
     const nextMonthStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}`;
     onChangeMonth(nextMonthStr);
